@@ -66,6 +66,7 @@ func Init(ctx context.Context, opts ...Option) (func(), error) {
 		opt(&o)
 	}
 
+	// 加载Config这个文件 最后会配置给C这个全局变量
 	config.MustLoad(o.ConfigFile)
 	if v := o.ModelFile; v != "" {
 		config.C.Casbin.Model = v

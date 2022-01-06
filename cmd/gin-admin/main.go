@@ -19,7 +19,7 @@ import (
 	"github.com/LyricTian/gin-admin/v8/pkg/logger"
 )
 
-// Usage: go build -ldflags "-X main.VERSION=x.x.x"
+// VERSION Usage: go build -ldflags "-X main.VERSION=x.x.x"
 var VERSION = "8.1.0"
 
 // @title gin-admin
@@ -35,6 +35,7 @@ var VERSION = "8.1.0"
 func main() {
 	ctx := logger.NewTagContext(context.Background(), "__main__")
 
+	// 创建CLI
 	app := cli.NewApp()
 	app.Name = "gin-admin"
 	app.Version = VERSION
@@ -42,6 +43,7 @@ func main() {
 	app.Commands = []*cli.Command{
 		newWebCmd(ctx),
 	}
+	// 提取参数
 	err := app.Run(os.Args)
 	if err != nil {
 		logger.WithContext(ctx).Errorf(err.Error())
@@ -74,6 +76,7 @@ func newWebCmd(ctx context.Context) *cli.Command {
 				Usage: "Static site directory",
 			},
 		},
+		// 将指定的文件映射根据不同的set方法映射进去
 		Action: func(c *cli.Context) error {
 			return app.Run(ctx,
 				app.SetConfigFile(c.String("conf")),
