@@ -18,12 +18,15 @@ var (
 
 // MustLoad Load config file (toml/json/yaml)
 func MustLoad(fpaths ...string) {
+	// 单例模式
 	once.Do(func() {
 		loaders := []multiconfig.Loader{
 			&multiconfig.TagLoader{},
 			&multiconfig.EnvironmentLoader{},
 		}
 
+
+		// 根据后缀名判断不同的文件，再根据不同的文件使用不同的方法加载变量
 		for _, fpath := range fpaths {
 			if strings.HasSuffix(fpath, "toml") {
 				loaders = append(loaders, &multiconfig.TOMLLoader{Path: fpath})
