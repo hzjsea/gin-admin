@@ -47,11 +47,16 @@ func (a *Router) RegisterAPI(app *gin.Engine) {
 		middleware.AllowPathPrefixSkipper("/api/v1/pub/login"),
 	))
 
-	g.Use(middleware.CasbinMiddleware(a.CasbinEnforcer,
-		middleware.AllowPathPrefixSkipper("/api/v1/pub"),
-	))
+	//g.Use(middleware.UserAuthMiddleware(a.Auth,
+	//	middleware.AllowMethodAndPathPrefixSkipper("/api/v1/users"),
+	//))
 
-	g.Use(middleware.RateLimiterMiddleware())
+	//g.Use(middleware.CasbinMiddleware(a.CasbinEnforcer,
+	//	middleware.AllowPathPrefixSkipper("/api/v1/pub"),
+	//))
+
+
+	//g.Use(middleware.RateLimiterMiddleware())
 
 	v1 := g.Group("/v1")
 	{

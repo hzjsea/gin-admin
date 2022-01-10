@@ -2,7 +2,6 @@ package api
 
 import (
 	"fmt"
-
 	"github.com/LyricTian/captcha"
 	"github.com/gin-gonic/gin"
 	"github.com/google/wire"
@@ -25,13 +24,16 @@ type LoginAPI struct {
 func (a *LoginAPI) GetCaptcha(c *gin.Context) {
 	ctx := c.Request.Context()
 	item, err := a.LoginSrv.GetCaptcha(ctx, config.C.Captcha.Length)
+	logger.Infof("验证码ID是%s", item)
 	if err != nil {
 		ginx.ResError(c, err)
 		return
 	}
+
 	ginx.ResSuccess(c, item)
 }
 
+// ResCaptcha 图片验证码
 func (a *LoginAPI) ResCaptcha(c *gin.Context) {
 	ctx := c.Request.Context()
 	captchaID := c.Query("id")
@@ -48,12 +50,19 @@ func (a *LoginAPI) ResCaptcha(c *gin.Context) {
 	}
 
 	cfg := config.C.Captcha
+	logger.Infof("配置文件 %s", cfg)
 	err := a.LoginSrv.ResCaptcha(ctx, c.Writer, captchaID, cfg.Width, cfg.Height)
 	if err != nil {
 		ginx.ResError(c, err)
 	}
 }
 
+
+// Login 登录流程
+// 需要检验两个内容
+// - 验证码
+// - 根据验证码获取的图形验证码, 这里先给他设置为true pass: 因为是底层写入的
+// - 用户密码
 func (a *LoginAPI) Login(c *gin.Context) {
 	ctx := c.Request.Context()
 	var item schema.LoginParam
@@ -62,17 +71,26 @@ func (a *LoginAPI) Login(c *gin.Context) {
 		return
 	}
 
-	if !captcha.VerifyString(item.CaptchaID, item.CaptchaCode) {
+	//logger.Infof("解析后的内容%v", item)
+
+	// 检验验证码
+	//logger.Infof("验证码ID %v 验证码Code %v", item.CaptchaID, item.CaptchaCode)
+	if captcha.VerifyString(item.CaptchaID, item.CaptchaCode){
+	//if !captcha.VerifyString(item.CaptchaID, item.CaptchaCode) {
 		ginx.ResError(c, errors.New400Response("无效的验证码"))
 		return
 	}
 
+	//logger.Infof("加密后的密码应该是 %s", hash.SHA1String(item.Password))
+	// 检验用户准确性
 	user, err := a.LoginSrv.Verify(ctx, item.UserName, item.Password)
 	if err != nil {
 		ginx.ResError(c, err)
 		return
 	}
+	//logger.Infof("%s",json.MarshalToString(user))
 
+	// 检验token
 	tokenInfo, err := a.LoginSrv.GenerateToken(ctx, a.formatTokenUserID(user.ID, user.UserName))
 	if err != nil {
 		ginx.ResError(c, err)

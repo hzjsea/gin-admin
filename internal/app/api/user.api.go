@@ -40,6 +40,7 @@ func (a *UserAPI) Query(c *gin.Context) {
 	ginx.ResPage(c, result.Data, result.PageResult)
 }
 
+// Get 根据ID 查找对应的用户
 func (a *UserAPI) Get(c *gin.Context) {
 	ctx := c.Request.Context()
 	item, err := a.UserSrv.Get(ctx, ginx.ParseParamID(c, "id"))
@@ -50,6 +51,7 @@ func (a *UserAPI) Get(c *gin.Context) {
 	ginx.ResSuccess(c, item.CleanSecure())
 }
 
+// Create 创建用户
 func (a *UserAPI) Create(c *gin.Context) {
 	ctx := c.Request.Context()
 	var item schema.User

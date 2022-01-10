@@ -36,12 +36,12 @@ func GetDB(ctx context.Context, defDB *gorm.DB) *gorm.DB {
 	return defDB
 }
 
-// Get gorm.DB.Model from context
+// GetDBWithModel Get gorm.DB.Model from context
 func GetDBWithModel(ctx context.Context, defDB *gorm.DB, m interface{}) *gorm.DB {
 	return GetDB(ctx, defDB).Model(m)
 }
 
-// Define transaction execute function
+// TransFunc Define transaction execute function
 type TransFunc func(context.Context) error
 
 func ExecTrans(ctx context.Context, db *gorm.DB, fn TransFunc) error {
