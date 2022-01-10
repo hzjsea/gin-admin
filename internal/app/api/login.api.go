@@ -90,7 +90,7 @@ func (a *LoginAPI) Login(c *gin.Context) {
 	}
 	//logger.Infof("%s",json.MarshalToString(user))
 
-	// 检验token
+	// 生成Token
 	tokenInfo, err := a.LoginSrv.GenerateToken(ctx, a.formatTokenUserID(user.ID, user.UserName))
 	if err != nil {
 		ginx.ResError(c, err)

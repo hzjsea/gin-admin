@@ -1,0 +1,2 @@
+GET http://localhost:10088/api/v1/users
+content-type: application/json

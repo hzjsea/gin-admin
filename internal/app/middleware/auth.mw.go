@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"fmt"
 	"strconv"
 	"strings"
 
@@ -38,6 +39,7 @@ func UserAuthMiddleware(a auth.Auther, skippers ...SkipperFunc) gin.HandlerFunc 
 		}
 
 		tokenUserID, err := a.ParseUserID(c.Request.Context(), ginx.GetToken(c))
+		fmt.Println(tokenUserID)
 		if err != nil {
 			if err == auth.ErrInvalidToken {
 				if config.C.IsDebugMode() {
