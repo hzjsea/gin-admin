@@ -2,6 +2,7 @@ package contextx
 
 import (
 	"context"
+	"fmt"
 )
 
 type (
@@ -13,7 +14,7 @@ type (
 	traceIDCtx   struct{}
 )
 
-// Wrap transaction context
+// NewTrans Wrap transaction context
 func NewTrans(ctx context.Context, trans interface{}) context.Context {
 	return context.WithValue(ctx, transCtx{}, trans)
 }
@@ -41,12 +42,14 @@ func FromTransLock(ctx context.Context) bool {
 	return v != nil && v.(bool)
 }
 
+// NewUserID 用户ID
 func NewUserID(ctx context.Context, userID uint64) context.Context {
 	return context.WithValue(ctx, userIDCtx{}, userID)
 }
 
 func FromUserID(ctx context.Context) uint64 {
 	v := ctx.Value(userIDCtx{})
+	fmt.Println(v)
 	if v != nil {
 		if s, ok := v.(uint64); ok {
 			return s

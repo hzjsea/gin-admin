@@ -116,6 +116,8 @@ func (a *LoginAPI) RefreshToken(c *gin.Context) {
 	ginx.ResSuccess(c, tokenInfo)
 }
 
+
+// GetUserInfo 获取用户信息
 func (a *LoginAPI) GetUserInfo(c *gin.Context) {
 	ctx := c.Request.Context()
 	info, err := a.LoginSrv.GetLoginInfo(ctx, contextx.FromUserID(ctx))

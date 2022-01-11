@@ -14,6 +14,7 @@ import (
 	"github.com/LyricTian/gin-admin/v8/pkg/logger"
 )
 
+// warpUserAuthContext 包装用户上下文
 func wrapUserAuthContext(c *gin.Context, userID uint64, userName string) {
 	ctx := contextx.NewUserID(c.Request.Context(), userID)
 	ctx = contextx.NewUserName(ctx, userName)
@@ -22,7 +23,7 @@ func wrapUserAuthContext(c *gin.Context, userID uint64, userName string) {
 	c.Request = c.Request.WithContext(ctx)
 }
 
-// Valid user token (jwt)
+// UserAuthMiddleware Valid user token (jwt)
 func UserAuthMiddleware(a auth.Auther, skippers ...SkipperFunc) gin.HandlerFunc {
 	if !config.C.JWTAuth.Enable {
 		return func(c *gin.Context) {

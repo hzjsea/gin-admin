@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"sort"
 
@@ -111,6 +112,7 @@ func (a *LoginSrv) checkAndGetUser(ctx context.Context, userID uint64) (*schema.
 }
 
 func (a *LoginSrv) GetLoginInfo(ctx context.Context, userID uint64) (*schema.UserLoginInfo, error) {
+	fmt.Println(userID)
 	if isRoot := schema.CheckIsRootUser(ctx, userID); isRoot {
 		root := schema.GetRootUser()
 		loginInfo := &schema.UserLoginInfo{
