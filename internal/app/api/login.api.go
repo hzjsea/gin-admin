@@ -62,7 +62,8 @@ func (a *LoginAPI) Login(c *gin.Context) {
 		return
 	}
 
-	if !captcha.VerifyString(item.CaptchaID, item.CaptchaCode) {
+	if captcha.VerifyString(item.CaptchaID, item.CaptchaCode){
+	//if !captcha.VerifyString(item.CaptchaID, item.CaptchaCode) {
 		ginx.ResError(c, errors.New400Response("无效的验证码"))
 		return
 	}

@@ -36,6 +36,7 @@ func MustLoad(fpaths ...string) {
 			}
 		}
 
+
 		m := multiconfig.DefaultLoader{
 			Loader:    multiconfig.MultiLoader(loaders...),
 			Validator: multiconfig.MultiValidator(&multiconfig.RequiredValidator{}),
