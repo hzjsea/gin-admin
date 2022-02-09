@@ -2,6 +2,7 @@ package menu
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/google/wire"
 	"gorm.io/gorm"
@@ -76,6 +77,8 @@ func (a *MenuRepo) Query(ctx context.Context, params schema.MenuQueryParam, opts
 
 func (a *MenuRepo) Get(ctx context.Context, id uint64, opts ...schema.MenuQueryOptions) (*schema.Menu, error) {
 	var item Menu
+	dbb := GetMenuDB(ctx, a.DB)
+	fmt.Println("获取一个db连接", dbb)
 	ok, err := util.FindOne(ctx, GetMenuDB(ctx, a.DB).Where("id=?", id), &item)
 	if err != nil {
 		return nil, errors.WithStack(err)

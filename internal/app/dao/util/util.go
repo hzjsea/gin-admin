@@ -20,9 +20,13 @@ type Model struct {
 	UpdatedAt time.Time
 }
 
-// Get gorm.DB from context
+// GetDB Get gorm.DB from context
+// 这个函数返回一个数据库的连接db
+// 同时他会判断当前db是否为需要事务的db 如果是需要事务的db 则会给表加上锁的db
+// 如果不是事务的db 则返回一个新的db
 func GetDB(ctx context.Context, defDB *gorm.DB) *gorm.DB {
 	trans, ok := contextx.FromTrans(ctx)
+
 	if ok && !contextx.FromNoTrans(ctx) {
 		db, ok := trans.(*gorm.DB)
 		if ok {

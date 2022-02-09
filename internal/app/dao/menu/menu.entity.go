@@ -11,6 +11,7 @@ import (
 )
 
 func GetMenuDB(ctx context.Context, defDB *gorm.DB) *gorm.DB {
+
 	return util.GetDBWithModel(ctx, defDB, new(Menu))
 }
 
@@ -21,6 +22,8 @@ func (a SchemaMenu) ToMenu() *Menu {
 	structure.Copy(a, item)
 	return item
 }
+
+
 
 type Menu struct {
 	util.Model

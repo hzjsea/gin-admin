@@ -14,10 +14,24 @@ type (
 )
 
 // Wrap transaction context
+//
+// NewTrans
+// @Description: 创建一个事务，将事务的tag写进ctx中去
+// @param ctx
+// @param trans
+// @return context.Context
+//
 func NewTrans(ctx context.Context, trans interface{}) context.Context {
 	return context.WithValue(ctx, transCtx{}, trans)
 }
 
+//
+// FromTrans
+// @Description: 解析ctx中的内容，如果存在有事务的tag 返回v,true
+// @param ctx
+// @return interface{}
+// @return bool
+//
 func FromTrans(ctx context.Context) (interface{}, bool) {
 	v := ctx.Value(transCtx{})
 	return v, v != nil
